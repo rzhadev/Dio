@@ -85,4 +85,14 @@ def static_eval(board: chess.Board):
         perspective = 1 if piece.color else -1
         value_sum += POINT_VAL[piece.piece_type] * perspective
         value_sum += list(reversed(PIECE_TABLES[piece.piece_type]))[pos_rank][pos_file] if piece.color else PIECE_TABLES[piece.piece_type][pos_rank][pos_file] * perspective  # noqa
+    return value_sum * (1 if board.turn else -1)
+
+def static_eval1(board: chess.Board):
+    value_sum = 0
+    for pos, piece in board.piece_map().items():
+        pos_file = chess.square_file(pos)
+        pos_rank = chess.square_rank(pos)
+        perspective = 1 if piece.color else -1
+        value_sum += POINT_VAL[piece.piece_type] * perspective
+        value_sum += list(reversed(PIECE_TABLES[piece.piece_type]))[pos_rank][pos_file] if piece.color else PIECE_TABLES[piece.piece_type][pos_rank][pos_file] * perspective  # noqa
     return value_sum

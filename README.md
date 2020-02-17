@@ -1,5 +1,6 @@
 # Dio
 ## TODO
-## -static evaluation function
 ## -negamax and alphabeta
-## -piece tables
+## -implement iterative deepening
+## -null move heuristic
+## -improve static eval?
