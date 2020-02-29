@@ -4,9 +4,27 @@ import sys
 import os
 import math
 from evaluate import static_eval
-from evaluate import static_eval1
 
-#negamax with alphabeta
+# negamax with alphabeta
+# max(a,b) == -min(-a, -b)
+
+# fail hard negamax
+
+
+def root(board, depth):
+    bestscore = -float("inf")
+    bestmove = None
+    for move in board.legal_moves:
+        board.push(move)
+        score = negamax(board, -float("inf"), float("inf"), depth)
+        board.pop()
+        print(f"{move}:{score}")
+        if score > bestscore:
+            bestscore = score
+            bestmove = move
+    return bestmove
+
+
 def negamax(board, alpha, beta, depth):
     if depth == 0:
         return static_eval(board)
@@ -21,39 +39,15 @@ def negamax(board, alpha, beta, depth):
             bestscore = score
             if score > alpha:
                 alpha = score
-        
-    return bestscore    
 
-def alphabeta(board, depth, alpha, beta, maxplayer):
-    if depth == 0:
-        return static_eval1(board)
-    if maxplayer:
-        score = -float("inf")
-        for move in board.legal_moves:
-            board.push(move)
-            score = max(score, alphabeta(board, depth - 1, alpha, beta, False))
-            board.pop()
-            alpha = max(alpha, score)
-            if alpha >= beta:
-                break
-        return score
-    else:
-        score = float("inf")
-        for move in board.legal_moves:
-            board.push(move)
-            score = min(score, alphabeta(board, depth-1, alpha, beta, True))
-            board.pop()
-            beta = min(beta, score)
-            if alpha >= beta:
-                break
-        return score
+    return bestscore
 
 
 start = time.time()
-board = chess.Board()
-print(negamax(board, -float("inf"), float("inf"), 5))
+b = chess.Board()
+s = root(b, 4)
+print(s)
 end = time.time()
-print(f'{end-start} seconds')
-print(alphabeta(board, 5, -float("inf"), float("inf"), True))
-end1 = time.time()
-print(f'{end1-end} seconds')
+print(f"{end-start} sec")
+
+
