@@ -1,6 +1,9 @@
 # Dio
+# homebrewing a chess engine and hoping it is good
 ## TODO
-## -negamax and alphabeta
-## -implement iterative deepening
+## -tt entry and features
 ## -null move heuristic
-## -improve static eval?
+## -improve move ordering (killer move, MVV/LVA)
+## -track PV?
+## -maybe parallelism using lazy smp
+## -improve static eval (too much work, pawn structure, king safety)
