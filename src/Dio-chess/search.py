@@ -2,10 +2,10 @@ import chess
 import time
 import sys
 import os
-from hash import initZobrist, calculateHash, applyHash
 from datetime import datetime
 from datetime import timedelta
 from evaluate import position_score
+
 
 # negamax with alphabeta
 # max(a,b) == -min(-a, -b)
@@ -22,13 +22,18 @@ def root(board, seconds=30):
     TIME = timedelta(seconds=seconds)
     while datetime.utcnow() - START < TIME:
         for move in board.legal_moves:
+            # autoset promotion to queen if its legal
+            move.promotion = 5
+            if not board.is_legal(move):
+                move.promotion = None
             board.push(move)
+            print(board)
             pos_score = negamax(board, -float("inf"), float("inf"), DEPTH, COLOR, START, TIME)
             board.pop()
             if pos_score > BESTSCORE:
                 BESTSCORE = pos_score
                 BESTMOVE = move
-        print(f"CURR TIME   {datetime.datetime.utcnow() - START}")
+        print(f"CURR TIME   {datetime.utcnow() - START}")
         print(f"best move: {BESTMOVE}:{BESTSCORE}")
         print(f"depth {DEPTH}")
         DEPTH += 1
@@ -54,8 +59,5 @@ def negamax(board, alpha, beta, depth, color, time_start, time_given):
 
     return bestscore
 
-
 b = chess.Board()
-s = root(b)
-print(s)
-
+print(root(b))
