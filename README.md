@@ -1,9 +1,8 @@
 # Dio
 # homebrewing a chess engine and hoping it is good
 ## TODO
-## -finish zobrist hashing integration with modded python-chess bitboard
-## -actually make ttable
+## -transposition table and hashing with replacement scheme
 ## -null move heuristic
-## -improve move ordering (killer move, MVV/LVA)
+## -improve move ordering (killer move, MVV/LVA), neural network?
 ## -track PV?
-## -maybe improve evaluation function
+## -improve heuristic evaluation function
