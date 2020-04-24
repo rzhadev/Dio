@@ -8,6 +8,7 @@ Z_ARR = POLYGLOT_RANDOM_ARRAY
 # apply an xor to the current hashkey based on a move
 # needs to be applied before board.push and after board.pop
 # queries current board state
+# incrementally adjust the current key
 
 
 def apply_hash(key, board, move: chess.Move):
@@ -121,6 +122,7 @@ def apply_hash(key, board, move: chess.Move):
     return key
 
 
+''' 
 if __name__ == '__main__':
     # castling test
     # b = chess.Board('rnb1kbnr/pp1q1ppp/8/2ppp3/2PPP3/2N1B3/PPQ2PPP/R3KBNR w KQkq - 0 1') # noqa
@@ -148,3 +150,4 @@ if __name__ == '__main__':
 
     print(b)
     print(key)
+'''

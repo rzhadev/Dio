@@ -16,7 +16,7 @@ from util import perft
 '''
 
 
-def root(board, key, seconds=5):
+def root(board, key, seconds=30):
     DEPTH = 1
     BESTSCORE = -float("inf")
     BESTMOVE = chess.Move.null()
@@ -25,6 +25,7 @@ def root(board, key, seconds=5):
     TIME = timedelta(seconds=seconds)
     global ttable
     while datetime.utcnow() - START < TIME:
+        print(f"depth {DEPTH}")
         for move in board.legal_moves:
             # autoset promotion to queen if its legal
             move.promotion = 5
@@ -44,7 +45,6 @@ def root(board, key, seconds=5):
                 BESTMOVE = move
         print(f"CURR TIME   {datetime.utcnow() - START}")
         print(f"best move: {BESTMOVE}:{BESTSCORE}")
-        print(f"depth {DEPTH}")
         DEPTH += 1
     return BESTMOVE
 
@@ -56,11 +56,26 @@ def root(board, key, seconds=5):
 
 def negamax(board, alpha, beta, depth, color, time_start, time_given, key):
     global ttable
+    alphaorig = alpha
+    keyorig = key
+    entry = ttable.probe(key)
+    if (entry is not None) and entry.depth >= depth:
+        if entry.flag == 'exact':
+            return entry.evaluation
+        elif entry.flag == 'lower':
+            alpha = max(entry.evaluation, alpha)
+        elif entry.flag == 'upper':
+            beta = min(entry.evaluation, beta)
 
-    if depth == 0 or (datetime.utcnow() - time_start) >= time_given:
+        if alpha >= beta:
+            return entry.evaluation
+
+    if depth == 0 or (datetime.utcnow() - time_start) >= time_given or board.is_game_over():  # noqa
         return position_score(board, color)
     bestscore = -float("inf")
-    for move in board.legal_moves:
+    moves = board.legal_moves
+    # order moves
+    for move in moves:
         key = apply_hash(key, board, move)
         board.push(move)
 
@@ -69,6 +84,8 @@ def negamax(board, alpha, beta, depth, color, time_start, time_given, key):
 
         board.pop()
         key = apply_hash(key, board, move)
+        # max(score, beta)
+
         if score >= beta:
             return score
         if score > bestscore:
@@ -76,12 +93,33 @@ def negamax(board, alpha, beta, depth, color, time_start, time_given, key):
             if score > alpha:
                 alpha = score
 
+    flag = ''
+    if bestscore <= alphaorig:
+        flag = 'upper'
+    elif bestscore >= beta:
+        flag = 'lower'
+    else:
+        flag = 'exact'
+
+    ttable.insert(keyorig, depth, bestscore, flag)
+
     return bestscore
 
 
-POSITIONS = 0
 ttable = TTable()
 b = chess.Board()
-key = zobrist_hash(b)
-print(key)
-print(root(b, key=key))
+while True:
+    key = zobrist_hash(b)
+    print(b)
+    qmove = input('move input:')
+    move = chess.Move.from_uci(qmove)
+    b.push(move)
+    cmove = root(b, key=key)
+    b.push(cmove)
+
+
+
+'''
+for k, v in ttable.table.items():
+    print(f'{k},{v.evaluation}')
+'''

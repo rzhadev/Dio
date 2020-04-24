@@ -1,5 +1,7 @@
 import chess
 
+# count the number of nodes explored for a certain depth from a given position
+
 
 def perft(board, depth):
     nodes = 0
@@ -8,11 +10,8 @@ def perft(board, depth):
     else:
         for move in board.legal_moves:
             board.push(move)
-            if(not board.is_game_over):
+            if(not board.is_game_over()):
                 nodes += perft(board, depth - 1)
             board.pop()
     return nodes
 
-
-b = chess.Board()
-print(perft(b, 10))
