@@ -1,5 +1,6 @@
 # Dio
-# homebrewing a chess engine and hoping it doesnt suck (it does)
+# exploring modern day chess algorithms for fun
+# still sucks at chess though
 ## Current Features
 ## -negamax alphabeta search function
 ## -iterative deepening framework, around 10 seconds per move
