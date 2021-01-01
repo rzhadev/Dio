@@ -1,6 +1,5 @@
 # Dio
-# exploring modern day chess algorithms for fun
-# still sucks at chess though
+# simple minimax chess algo
 ## Current Features
 ## -negamax alphabeta search function
 ## -iterative deepening framework, around 10 seconds per move
@@ -14,4 +13,3 @@
 ## -move ordering** (null move, killer heuristic, hash move)
 ## -track PV and pv moves
 ## -improve ttable replacement scheme, maybe add buckets
-## -
